@@ -1,5 +1,6 @@
 # Understanding Gibbs Sampling
 # from https://www.youtube.com/watch?v=ER3DDBFzH2g
+library(tidyverse)
 
 # A and B two horses
 # 0 = the horse loses its race
