@@ -1,6 +1,5 @@
 # Understanding Gibbs Sampling
-# https://www.youtube.com/watch?v=ER3DDBFzH2g
-# (not working yet)
+# from https://www.youtube.com/watch?v=ER3DDBFzH2g
 
 # A and B two horses
 # 0 = the horse loses its race
@@ -23,8 +22,8 @@ cond_b <- data.frame(cond_b)
 cond_a <- prop.table(outcomes,margin = 2)
 cond_a <- data.frame(cond_a)
 
-# Gibbs sampling algorithm
-T <- 10000
+# Gibbs sampling algorithm (asymptotically converges)
+T <- 300
 support <- c(0,1)
 
 # initialize sample tibble:
@@ -41,14 +40,14 @@ for(t in 2:T){
   gibbs[t,1] <- sample(support,prob = c_a$Freq,1)
   
   # resample A from P(A|B)
-  c_b <- cond_b %>% filter(B==as.numeric(gibbs[t-1,1]))
+  c_b <- cond_b %>% filter(B==as.numeric(gibbs[t,1]))
   gibbs[t,2] <- sample(support,prob = c_b$Freq,1)
 
   gibbs
 
   
   # uncomment for visualization:
-  # joint_pdfs[[t]] <- gibbs[1:t,] %>% table
+  joint_pdfs[[t]] <- gibbs[1:t,] %>% table
     
 }
 
@@ -57,8 +56,9 @@ prop.table(table(gibbs))
 plot(table(gibbs))
 
 # Visualize
-for(i in 30:T){
+for(i in 20:T){
   i <- i+1
   try(print(plot(joint_pdfs[[i]],main="Gibbs sampling")))
-  Sys.sleep(0.2)
+  Sys.sleep(0.1)
 }
+
